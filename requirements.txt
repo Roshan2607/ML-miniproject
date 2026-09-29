@@ -1,0 +1,8 @@
+torch
+torchaudio
+numpy
+librosa
+scipy
+g2p_en
+pandas
+tqdm
