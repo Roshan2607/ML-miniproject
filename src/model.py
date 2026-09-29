@@ -72,3 +72,36 @@ class Seq2SeqTTS(nn.Module):
             input_step = target_spectrogram[:, t, :].unsqueeze(1) if teacher_force else prediction.unsqueeze(1)
                 
         return outputs
+
+
+class SimpleNN(nn.Module):
+    def __init__(self, vocab_size, embed_dim, max_seq_len, target_len, output_dim):
+        super(SimpleNN, self).__init__()
+        # The input layer is the word embedding vector encoded from original sentences
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        
+        input_size = max_seq_len * embed_dim
+        self.target_len = target_len
+        self.output_dim = output_dim
+        
+        # The hidden layer is fully connected with same number of neurons as the input layer
+        self.hidden = nn.Linear(input_size, input_size)
+        
+        # The output layer is a stretched 1D vector of the spectrogram
+        self.output = nn.Linear(input_size, target_len * output_dim)
+
+    def forward(self, x):
+        batch_size = x.size(0)
+        
+        # Embed and reshape to 1D arrays to match the neural network structure
+        x = self.embedding(x)
+        x = x.view(batch_size, -1)
+        
+        x = torch.relu(self.hidden(x))
+        
+        # Output layer uses sigmoid activation function to squish results (0 to 1)
+        x = torch.sigmoid(self.output(x))
+        
+        # Reshape the prediction vectors back to matrices for post-processing
+        return x.view(batch_size, self.target_len, self.output_dim)
+
