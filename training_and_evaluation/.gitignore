@@ -1,0 +1,2 @@
+# Large trained model checkpoints
+checkpoints/*.pt
