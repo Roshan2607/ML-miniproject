@@ -6,3 +6,5 @@ scipy
 g2p_en
 pandas
 tqdm
+soundfile
+matplotlib
