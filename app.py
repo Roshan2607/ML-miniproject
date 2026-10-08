@@ -70,9 +70,7 @@ app = gr.Interface(
         "Welcome to our machine learning presentation.",
         "We built an end to end text to speech model.",
         "The neural network consists of over ten million parameters."
-    ],
-    allow_flagging="never",
-    theme=gr.themes.Soft()
+    ]
 )
 
 if __name__ == "__main__":
